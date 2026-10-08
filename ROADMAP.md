@@ -9,10 +9,12 @@
 - [x] Docker/CI foundation
 
 ## Phase 1 — Deterministic SAST MVP
-- [ ] Python security rules
+- [x] Python security scanner foundation
+- [x] High-confidence dynamic execution detection
+- [x] shell=True command execution detection
+- [x] Evidence extraction
+- [x] CWE/OWASP mapping
 - [ ] JavaScript/TypeScript security rules
-- [ ] Evidence extraction
-- [ ] CWE/OWASP mapping
 - [ ] Finding deduplication
 - [ ] SARIF output
 - [ ] JSON output
