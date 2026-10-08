@@ -13,15 +13,14 @@
 - [x] High-confidence dynamic execution detection
 - [x] shell=True command execution detection
 - [x] Evidence extraction
-- [x] CWE/OWASP mapping
 - [ ] JavaScript/TypeScript security rules
 - [ ] Finding deduplication
 - [ ] SARIF output
 - [ ] JSON output
-- [ ] CLI scan command
+- [x] CLI scan command
 
 ## Phase 2 — Secrets & Dependencies
-- [ ] High-confidence secret rules
+- [x] High-confidence secret rules
 - [ ] Entropy-assisted secret detection
 - [ ] Lockfile parsing
 - [ ] Dependency advisory integration
