@@ -7,7 +7,7 @@ from rich.console import Console
 
 from appsec import __version__
 from appsec.models import ScanResult
-from appsec.scanners import PythonSecurityScanner
+from appsec.scanners import PythonSecurityScanner, SecretScanner
 
 app = typer.Typer(help="AI-assisted application security scanner.")
 console = Console()
@@ -26,17 +26,20 @@ def scan(
     ),
 ) -> None:
     """Run deterministic security scanners against PATH."""
-    scanner = PythonSecurityScanner()
-    findings = scanner.scan(path)
+    scanners = (PythonSecurityScanner(), SecretScanner())
+    findings = [finding for scanner in scanners for finding in scanner.scan(path)]
+
     files_scanned = sum(
         1
-        for candidate in path.rglob("*.py")
-        if not any(
+        for candidate in path.rglob("*")
+        if candidate.is_file()
+        and candidate.suffix.lower() in SecretScanner._EXTENSIONS
+        and not any(
             part in {".git", ".venv", "venv", "__pycache__", "node_modules"}
             for part in candidate.parts
         )
     )
-    result = ScanResult(findings=findings, files_scanned=files_scanned, rules_run=2)
+    result = ScanResult(findings=findings, files_scanned=files_scanned, rules_run=6)
 
     console.print(f"Scanned [bold]{path.resolve()}[/bold]")
     console.print(f"Files: {result.files_scanned} | Findings: {len(result.findings)}")
