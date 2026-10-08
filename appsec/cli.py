@@ -21,7 +21,9 @@ def version() -> None:
 
 @app.command()
 def scan(
-    path: Path = typer.Argument(Path("."), exists=True, file_okay=False, readable=True),
+    path: Path = typer.Argument(  # noqa: B008
+        Path("."), exists=True, file_okay=False, readable=True
+    ),
 ) -> None:
     """Run deterministic security scanners against PATH."""
     scanner = PythonSecurityScanner()
@@ -29,7 +31,10 @@ def scan(
     files_scanned = sum(
         1
         for candidate in path.rglob("*.py")
-        if not any(part in {".git", ".venv", "venv", "__pycache__", "node_modules"} for part in candidate.parts)
+        if not any(
+            part in {".git", ".venv", "venv", "__pycache__", "node_modules"}
+            for part in candidate.parts
+        )
     )
     result = ScanResult(findings=findings, files_scanned=files_scanned, rules_run=2)
 
