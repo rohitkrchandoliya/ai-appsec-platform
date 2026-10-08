@@ -30,7 +30,7 @@ class SecretScanner(Scanner):
     _EXTENSIONS: ClassVar = {
         ".py", ".js", ".jsx", ".ts", ".tsx", ".java", ".go", ".rs", ".rb",
         ".php", ".cs", ".cpp", ".c", ".h", ".yaml", ".yml", ".json", ".toml",
-        ".ini", ".cfg", ".conf", ".env", ".txt", ".md",
+        ".ini", ".cfg", ".conf", ".env", ".pem", ".key", ".txt", ".md",
     }
 
     def scan(self, root: Path) -> list[Finding]:
