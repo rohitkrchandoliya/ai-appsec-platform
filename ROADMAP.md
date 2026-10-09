@@ -13,10 +13,10 @@
 - [x] High-confidence dynamic execution detection
 - [x] shell=True command execution detection
 - [x] Evidence extraction
-- [ ] JavaScript/TypeScript security rules
-- [ ] Finding deduplication
+- [x] JavaScript/TypeScript security rules
+- [x] Finding deduplication
 - [ ] SARIF output
-- [ ] JSON output
+- [x] JSON output
 - [x] CLI scan command
 
 ## Phase 2 — Secrets & Dependencies
