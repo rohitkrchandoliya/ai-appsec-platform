@@ -14,7 +14,7 @@ class JavaScriptSecurityScanner(Scanner):
     name = "javascript-sast"
     _EXTENSIONS: ClassVar[set[str]] = {".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs"}
 
-    _RULES: ClassVar[tuple] = (
+    _RULES: ClassVar[tuple[tuple[str, re.Pattern[str], str, str, Severity, str, str], ...]] = (
         (
             "JSSEC-001",
             re.compile(r"\beval\s*\("),
