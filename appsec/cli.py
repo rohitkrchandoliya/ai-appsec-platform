@@ -9,8 +9,8 @@ from rich.console import Console
 from appsec import __version__
 from appsec.findings import normalize_findings
 from appsec.models import ScanResult
-from appsec.scanners import JavaScriptSecurityScanner, PythonSecurityScanner, SecretScanner
 from appsec.sarif import sarif_json
+from appsec.scanners import JavaScriptSecurityScanner, PythonSecurityScanner, SecretScanner
 
 app = typer.Typer(help="AI-assisted application security scanner.")
 console = Console()
