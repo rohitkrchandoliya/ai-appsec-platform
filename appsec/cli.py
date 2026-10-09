@@ -10,6 +10,7 @@ from appsec import __version__
 from appsec.findings import normalize_findings
 from appsec.models import ScanResult
 from appsec.scanners import JavaScriptSecurityScanner, PythonSecurityScanner, SecretScanner
+from appsec.sarif import sarif_json
 
 app = typer.Typer(help="AI-assisted application security scanner.")
 console = Console()
@@ -28,6 +29,9 @@ def scan(
     ),
     json_output: bool = typer.Option(
         False, "--json", help="Emit machine-readable JSON instead of human-readable output."
+    ),
+    sarif_output: bool = typer.Option(
+        False, "--sarif", help="Emit SARIF 2.1.0 JSON for code-scanning integrations."
     ),
 ) -> None:
     """Run deterministic security scanners against PATH."""
@@ -53,6 +57,11 @@ def scan(
     )
     result = ScanResult(findings=findings, files_scanned=files_scanned, rules_run=11)
 
+    if json_output and sarif_output:
+        raise typer.BadParameter("Use either --json or --sarif, not both.")
+    if sarif_output:
+        typer.echo(sarif_json(result))
+        return
     if json_output:
         typer.echo(json.dumps(result.model_dump(mode="json"), indent=2))
         return
