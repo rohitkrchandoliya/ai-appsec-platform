@@ -15,7 +15,7 @@
 - [x] Evidence extraction
 - [x] JavaScript/TypeScript security rules
 - [x] Finding deduplication
-- [ ] SARIF output
+- [x] SARIF 2.1.0 output and CLI flag
 - [x] JSON output
 - [x] CLI scan command
 
