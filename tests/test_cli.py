@@ -23,3 +23,21 @@ def test_scan_json_output(tmp_path: Path) -> None:
     assert payload["files_scanned"] == 1
     assert payload["findings"][0]["rule_id"] == "JSSEC-004"
     assert payload["findings"][0]["path"] == "sample.js"
+
+
+
+def test_scan_sarif_output(tmp_path: Path) -> None:
+    (tmp_path / "sample.py").write_text("eval(user_input)\\n", encoding="utf-8")
+    result = runner.invoke(app, ["scan", str(tmp_path), "--sarif"])
+
+    assert result.exit_code == 0
+    payload = __import__("json").loads(result.stdout)
+    assert payload["version"] == "2.1.0"
+    assert payload["runs"][0]["results"][0]["ruleId"] == "PYSEC-001"
+
+
+def test_scan_rejects_json_and_sarif_together(tmp_path: Path) -> None:
+    result = runner.invoke(app, ["scan", str(tmp_path), "--json", "--sarif"])
+
+    assert result.exit_code != 0
+    assert "Use either --json or --sarif" in result.output
