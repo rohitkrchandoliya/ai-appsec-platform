@@ -2,6 +2,7 @@
 
 import re
 from pathlib import Path
+from typing import ClassVar
 
 from appsec.models import Finding, Severity
 from appsec.scanners.base import Scanner
@@ -11,9 +12,9 @@ class JavaScriptSecurityScanner(Scanner):
     """Detect high-confidence JavaScript/TypeScript security anti-patterns."""
 
     name = "javascript-sast"
-    _EXTENSIONS = {".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs"}
+    _EXTENSIONS: ClassVar[set[str]] = {".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs"}
 
-    _RULES = (
+    _RULES: ClassVar[tuple] = (
         (
             "JSSEC-001",
             re.compile(r"\beval\s*\("),
