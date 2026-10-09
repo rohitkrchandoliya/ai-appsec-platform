@@ -1,13 +1,15 @@
 """Command-line entry point."""
 
+import json
 from pathlib import Path
 
 import typer
 from rich.console import Console
 
 from appsec import __version__
+from appsec.findings import normalize_findings
 from appsec.models import ScanResult
-from appsec.scanners import PythonSecurityScanner, SecretScanner
+from appsec.scanners import JavaScriptSecurityScanner, PythonSecurityScanner, SecretScanner
 
 app = typer.Typer(help="AI-assisted application security scanner.")
 console = Console()
@@ -24,25 +26,41 @@ def scan(
     path: Path = typer.Argument(  # noqa: B008
         Path("."), exists=True, file_okay=False, readable=True
     ),
+    json_output: bool = typer.Option(
+        False, "--json", help="Emit machine-readable JSON instead of human-readable output."
+    ),
 ) -> None:
     """Run deterministic security scanners against PATH."""
-    scanners = (PythonSecurityScanner(), SecretScanner())
-    findings = [finding for scanner in scanners for finding in scanner.scan(path)]
+    scanners = (
+        PythonSecurityScanner(),
+        JavaScriptSecurityScanner(),
+        SecretScanner(),
+    )
+    raw_findings = [finding for scanner in scanners for finding in scanner.scan(path)]
+    findings = normalize_findings(raw_findings, path)
 
+    extensions = SecretScanner._EXTENSIONS | JavaScriptSecurityScanner._EXTENSIONS
+    extensions.add(".py")
     files_scanned = sum(
         1
         for candidate in path.rglob("*")
         if candidate.is_file()
-        and candidate.suffix.lower() in SecretScanner._EXTENSIONS
+        and candidate.suffix.lower() in extensions
         and not any(
             part in {".git", ".venv", "venv", "__pycache__", "node_modules"}
             for part in candidate.parts
         )
     )
-    result = ScanResult(findings=findings, files_scanned=files_scanned, rules_run=6)
+    result = ScanResult(findings=findings, files_scanned=files_scanned, rules_run=11)
+
+    if json_output:
+        console.print(json.dumps(result.model_dump(mode="json"), indent=2))
+        return
 
     console.print(f"Scanned [bold]{path.resolve()}[/bold]")
-    console.print(f"Files: {result.files_scanned} | Findings: {len(result.findings)}")
+    console.print(
+        f"Files: {result.files_scanned} | Findings: {len(result.findings)} | Rules: {result.rules_run}"
+    )
     for finding in result.findings:
         console.print(
             f"[{finding.severity.value}] {finding.rule_id} "
