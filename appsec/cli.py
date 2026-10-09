@@ -54,7 +54,7 @@ def scan(
     result = ScanResult(findings=findings, files_scanned=files_scanned, rules_run=11)
 
     if json_output:
-        console.print(json.dumps(result.model_dump(mode="json"), indent=2))
+        typer.echo(json.dumps(result.model_dump(mode="json"), indent=2))
         return
 
     console.print(f"Scanned [bold]{path.resolve()}[/bold]")
