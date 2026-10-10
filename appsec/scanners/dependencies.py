@@ -5,6 +5,7 @@ import tomllib
 from pathlib import Path
 
 from appsec.models import Dependency
+
 _REQUIREMENT = re.compile(r"^([A-Za-z0-9][A-Za-z0-9_.-]*)\s*(.*)$")
 
 
