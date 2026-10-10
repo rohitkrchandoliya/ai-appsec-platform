@@ -9,7 +9,7 @@ from rich.console import Console
 from appsec import __version__
 from appsec.findings import normalize_findings
 from appsec.models import ScanResult
-from appsec.sarif import sarif_json
+from appsec.sarif import sarif_json\nfrom appsec.sbom import sbom_json
 from appsec.scanners import JavaScriptSecurityScanner, PythonSecurityScanner, SecretScanner
 from appsec.scanners.advisories import audit_dependencies
 from appsec.scanners.dependencies import discover_dependencies
@@ -39,6 +39,9 @@ def scan(
         False,
         "--audit-dependencies",
         help="Query OSV for known issues in exact-pinned Python dependencies.",
+    ),
+    sbom_output: bool = typer.Option(
+        False, "--sbom", help="Emit a CycloneDX 1.5 SBOM for exact-pinned Python dependencies."
     ),
 ) -> None:
     """Run deterministic security scanners against PATH."""
@@ -77,8 +80,12 @@ def scan(
         rules_run=12,
     )
 
-    if json_output and sarif_output:
-        raise typer.BadParameter("Use either --json or --sarif, not both.")
+    output_modes = sum((json_output, sarif_output, sbom_output))
+    if output_modes > 1:
+        raise typer.BadParameter("Use only one of --json, --sarif, or --sbom.")
+    if sbom_output:
+        typer.echo(sbom_json(dependencies, path))
+        return
     if sarif_output:
         typer.echo(sarif_json(result))
         return
