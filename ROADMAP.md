@@ -21,7 +21,7 @@
 
 ## Phase 2 — Secrets & Dependencies
 - [x] High-confidence secret rules
-- [ ] Entropy-assisted secret detection
+- [x] Entropy-assisted secret detection
 - [ ] Lockfile parsing
 - [ ] Dependency advisory integration
 - [ ] SBOM generation
