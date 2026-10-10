@@ -2,8 +2,6 @@
 
 from appsec.models import Dependency, Finding, Severity
 
-
-
 def dependency_risk_score(
     dependency: Dependency,
     findings: list[Finding],
