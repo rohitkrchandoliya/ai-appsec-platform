@@ -23,7 +23,7 @@
 - [x] High-confidence secret rules
 - [x] Entropy-assisted secret detection
 - [x] Python lockfile parsing (`uv.lock`, `poetry.lock`, `Pipfile.lock`)
-- [ ] Dependency advisory integration
+- [x] OSV advisory integration for exact-pinned Python dependencies
 - [ ] SBOM generation
 - [ ] Dependency risk scoring
 
