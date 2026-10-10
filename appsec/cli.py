@@ -11,7 +11,8 @@ from appsec.findings import normalize_findings
 from appsec.models import ScanResult
 from appsec.sarif import sarif_json
 from appsec.scanners import JavaScriptSecurityScanner, PythonSecurityScanner, SecretScanner
-from appsec.scanners.advisories import audit_dependencies\nfrom appsec.scanners.dependencies import discover_dependencies
+from appsec.scanners.advisories import audit_dependencies
+from appsec.scanners.dependencies import discover_dependencies
 
 app = typer.Typer(help="AI-assisted application security scanner.")
 console = Console()
