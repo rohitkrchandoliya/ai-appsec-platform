@@ -23,6 +23,7 @@ def test_scan_json_output(tmp_path: Path) -> None:
     assert payload["files_scanned"] == 1
     assert payload["findings"][0]["rule_id"] == "JSSEC-004"
     assert payload["findings"][0]["path"] == "sample.js"
+    assert payload["dependencies"] == []
 
 
 
