@@ -1,9 +1,8 @@
 """Python dependency inventory parsing."""
 
-from pathlib import Path
-
 import re
 import tomllib
+from pathlib import Path
 
 from appsec.models import Dependency
 
