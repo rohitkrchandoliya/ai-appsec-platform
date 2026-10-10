@@ -56,8 +56,13 @@ def scan(
             for part in candidate.parts
         )
     )
-    result = ScanResult(findings=findings, files_scanned=files_scanned, rules_run=12)
-    _ = discover_dependencies(path)
+    dependencies = discover_dependencies(path)
+    result = ScanResult(
+        findings=findings,
+        dependencies=dependencies,
+        files_scanned=files_scanned,
+        rules_run=12,
+    )
 
     if json_output and sarif_output:
         raise typer.BadParameter("Use either --json or --sarif, not both.")
