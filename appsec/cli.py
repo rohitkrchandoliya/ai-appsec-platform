@@ -8,7 +8,7 @@ from rich.console import Console
 
 from appsec import __version__
 from appsec.findings import normalize_findings
-from appsec.models import ScanResult
+from appsec.models import DependencyRisk, ScanResult
 from appsec.sarif import sarif_json
 from appsec.risk import dependency_risk_score
 from appsec.sbom import sbom_json
@@ -75,11 +75,16 @@ def scan(
             raise typer.BadParameter(str(exc)) from exc
         findings = normalize_findings([*findings, *dependency_findings], path)
 
-    dependency_risks = []
+    dependency_risks: list[DependencyRisk] = []
     for dependency in dependencies:
         score, severity, rationale = dependency_risk_score(dependency, findings)
         dependency_risks.append(
-            {"name": dependency.name, "score": score, "severity": severity, "rationale": rationale}
+            DependencyRisk(
+                name=dependency.name,
+                score=score,
+                severity=severity,
+                rationale=rationale,
+            )
         )
 
     result = ScanResult(
