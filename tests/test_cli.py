@@ -41,3 +41,17 @@ def test_scan_rejects_json_and_sarif_together(tmp_path: Path) -> None:
     result = runner.invoke(app, ["scan", str(tmp_path), "--json", "--sarif"])
 
     assert result.exit_code != 0
+
+
+
+def test_scan_sbom_output(tmp_path: Path) -> None:
+    (tmp_path / "uv.lock").write_text(
+        'version = 1\n\n[[package]]\nname = "requests"\nversion = "2.32.0"\n',
+        encoding="utf-8",
+    )
+    result = runner.invoke(app, ["scan", str(tmp_path), "--sbom"])
+
+    assert result.exit_code == 0
+    payload = __import__("json").loads(result.stdout)
+    assert payload["bomFormat"] == "CycloneDX"
+    assert payload["components"][0]["purl"] == "pkg:pypi/requests@2.32.0"
