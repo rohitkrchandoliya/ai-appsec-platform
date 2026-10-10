@@ -9,8 +9,8 @@ from rich.console import Console
 from appsec import __version__
 from appsec.findings import normalize_findings
 from appsec.models import DependencyRisk, ScanResult
-from appsec.sarif import sarif_json
 from appsec.risk import dependency_risk_score
+from appsec.sarif import sarif_json
 from appsec.sbom import sbom_json
 from appsec.scanners import JavaScriptSecurityScanner, PythonSecurityScanner, SecretScanner
 from appsec.scanners.advisories import audit_dependencies
