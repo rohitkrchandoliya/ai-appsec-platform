@@ -44,6 +44,17 @@ class Dependency(BaseModel):
     source: str = Field(min_length=1)
 
 
+class DependencyRisk(BaseModel):
+    """Deterministic risk assessment for one dependency."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    name: str = Field(min_length=1)
+    score: int = Field(ge=0, le=100)
+    severity: Severity
+    rationale: str = Field(min_length=1)
+
+
 class ScanResult(BaseModel):
     """Result of scanning a source tree."""
 
@@ -51,5 +62,6 @@ class ScanResult(BaseModel):
 
     findings: list[Finding] = Field(default_factory=list)
     dependencies: list[Dependency] = Field(default_factory=list)
+    dependency_risks: list[DependencyRisk] = Field(default_factory=list)
     files_scanned: int = Field(default=0, ge=0)
     rules_run: int = Field(default=0, ge=0)
