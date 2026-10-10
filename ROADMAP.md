@@ -22,7 +22,7 @@
 ## Phase 2 — Secrets & Dependencies
 - [x] High-confidence secret rules
 - [x] Entropy-assisted secret detection
-- [ ] Lockfile parsing
+- [x] Python lockfile parsing (`uv.lock`, `poetry.lock`, `Pipfile.lock`)
 - [ ] Dependency advisory integration
 - [ ] SBOM generation
 - [ ] Dependency risk scoring
