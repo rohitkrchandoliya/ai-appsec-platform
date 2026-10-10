@@ -10,6 +10,7 @@ from appsec import __version__
 from appsec.findings import normalize_findings
 from appsec.models import ScanResult
 from appsec.sarif import sarif_json
+from appsec.risk import dependency_risk_score
 from appsec.sbom import sbom_json
 from appsec.scanners import JavaScriptSecurityScanner, PythonSecurityScanner, SecretScanner
 from appsec.scanners.advisories import audit_dependencies
@@ -74,9 +75,17 @@ def scan(
             raise typer.BadParameter(str(exc)) from exc
         findings = normalize_findings([*findings, *dependency_findings], path)
 
+    dependency_risks = []
+    for dependency in dependencies:
+        score, severity, rationale = dependency_risk_score(dependency, findings)
+        dependency_risks.append(
+            {"name": dependency.name, "score": score, "severity": severity, "rationale": rationale}
+        )
+
     result = ScanResult(
         findings=findings,
         dependencies=dependencies,
+        dependency_risks=dependency_risks,
         files_scanned=files_scanned,
         rules_run=12,
     )
