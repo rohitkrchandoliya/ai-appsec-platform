@@ -1,6 +1,12 @@
 from pathlib import Path
 
-from appsec.scanners.dependencies import discover_dependencies, parse_pyproject, parse_requirements
+from appsec.scanners.dependencies import (
+    discover_dependencies,
+    parse_pipfile_lock,
+    parse_pyproject,
+    parse_requirements,
+    parse_toml_lockfile,
+)
 
 
 def test_parses_pep621_dependencies(tmp_path: Path) -> None:
@@ -48,3 +54,38 @@ def test_discovers_supported_manifests(tmp_path: Path) -> None:
     (tmp_path / "requirements.txt").write_text("urllib3==2.2.0\n", encoding="utf-8")
     dependencies = discover_dependencies(tmp_path)
     assert {item.name for item in dependencies} == {"requests", "urllib3"}
+
+
+
+def test_parses_uv_and_poetry_lockfiles(tmp_path: Path) -> None:
+    uv_lock = tmp_path / "uv.lock"
+    uv_lock.write_text(
+        'version = 1\n\n[[package]]\nname = "requests"\nversion = "2.32.0"\n',
+        encoding="utf-8",
+    )
+    poetry_lock = tmp_path / "poetry.lock"
+    poetry_lock.write_text(
+        '[[package]]\nname = "urllib3"\nversion = "2.2.0"\n',
+        encoding="utf-8",
+    )
+
+    uv = parse_toml_lockfile(uv_lock)
+    poetry = parse_toml_lockfile(poetry_lock)
+    assert [(item.name, item.specifier) for item in uv] == [("requests", "==2.32.0")]
+    assert [(item.name, item.specifier) for item in poetry] == [("urllib3", "==2.2.0")]
+
+
+def test_parses_pipfile_lock_versions(tmp_path: Path) -> None:
+    path = tmp_path / "Pipfile.lock"
+    path.write_text(
+        '{"default":{"requests":{"version":"==2.32.0"}},'
+        '"develop":{"pytest":{"version":"==8.3.0"}},'
+        '"meta":{"hash":{"sha256":"example"}}}',
+        encoding="utf-8",
+    )
+
+    dependencies = parse_pipfile_lock(path)
+    assert {(item.name, item.specifier) for item in dependencies} == {
+        ("requests", "==2.32.0"),
+        ("pytest", "==8.3.0"),
+    }
