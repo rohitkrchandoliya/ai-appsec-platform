@@ -34,6 +34,21 @@ class Finding(BaseModel):
     confidence: float = Field(default=1.0, ge=0.0, le=1.0)
 
 
+"""Dependency inventory models."""
+
+from pydantic import BaseModel, ConfigDict, Field
+
+
+class Dependency(BaseModel):
+    """A declared dependency with its source location and version constraint."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    name: str = Field(min_length=1)
+    specifier: str = ""
+    source: str = Field(min_length=1)
+
+
 class ScanResult(BaseModel):
     """Result of scanning a source tree."""
 
