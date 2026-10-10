@@ -51,7 +51,12 @@ def parse_pyproject(path: Path) -> list[Dependency]:
             if isinstance(group, list):
                 values.extend(item for item in group if isinstance(item, str))
 
-    return [_parse_requirement(value, path) for value in values if _parse_requirement(value, path)]
+    parsed: list[Dependency] = []
+    for value in values:
+        dependency = _parse_requirement(value, path)
+        if dependency is not None:
+            parsed.append(dependency)
+    return parsed
 
 
 def _parse_requirement(value: str, path: Path) -> Dependency | None:
