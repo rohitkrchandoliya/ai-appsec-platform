@@ -4,20 +4,18 @@ from appsec.models import Dependency, Finding, Severity
 
 
 
-_SEVERITY_WEIGHT = {
-    Severity.INFO: 0,
-    Severity.LOW: 15,
-    Severity.MEDIUM: 35,
-    Severity.HIGH: 60,
-    Severity.CRITICAL: 85,
-}
-
-
 def dependency_risk_score(
     dependency: Dependency,
     findings: list[Finding],
 ) -> tuple[int, Severity, str]:
     """Score one dependency from 0-100 using deterministic local evidence."""
+    severity_weight = {
+        Severity.INFO: 0,
+        Severity.LOW: 15,
+        Severity.MEDIUM: 35,
+        Severity.HIGH: 60,
+        Severity.CRITICAL: 85,
+    }
     related = [
         finding
         for finding in findings
@@ -34,7 +32,7 @@ def dependency_risk_score(
         reasons.append("version is not exact-pinned")
 
     if related:
-        highest = max((_SEVERITY_WEIGHT[f.severity] for f in related), default=0)
+        highest = max((severity_weight[f.severity] for f in related), default=0)
         score += highest
         if len(related) > 1:
             score += min(15, (len(related) - 1) * 5)
