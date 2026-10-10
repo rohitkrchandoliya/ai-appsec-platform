@@ -55,7 +55,7 @@ def scan(
             for part in candidate.parts
         )
     )
-    result = ScanResult(findings=findings, files_scanned=files_scanned, rules_run=11)
+    result = ScanResult(findings=findings, files_scanned=files_scanned, rules_run=12)
 
     if json_output and sarif_output:
         raise typer.BadParameter("Use either --json or --sarif, not both.")
