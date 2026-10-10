@@ -34,7 +34,7 @@ def dependency_risk_score(
         highest = max((severity_weight[f.severity] for f in related), default=0)
         score += highest
         if len(related) > 1:
-            score += min(15, (len(related) - 1) * 5)
+            score += min(15, (len(related) - 1) * 10)
         reasons.append(f"{len(related)} known advisory finding(s)")
     else:
         reasons.append("no known advisory findings")
@@ -46,7 +46,7 @@ def dependency_risk_score(
         severity = Severity.HIGH
     elif score >= 35:
         severity = Severity.MEDIUM
-    elif score >= 15:
+    elif score > 0:
         severity = Severity.LOW
     else:
         severity = Severity.INFO
