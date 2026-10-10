@@ -10,6 +10,7 @@ A developer-first application security scanner that combines deterministic sourc
 - **Dependency inventory:** parses PEP 621 dependencies and optional groups from `pyproject.toml`, requirements files, and exact versions from `uv.lock`, `poetry.lock`, and `Pipfile.lock`. Inventory is included in JSON scan results.
 - **Dependency advisory audit:** opt-in `--audit-dependencies` queries the OSV API for exact-pinned Python dependencies and adds known advisories to findings. Network access is required for this option.
 - **SBOM export:** `--sbom` emits CycloneDX 1.5 JSON from exact-pinned Python dependencies; unresolved version ranges are intentionally excluded.
+- **Dependency risk scoring:** each discovered dependency receives a deterministic 0–100 risk score based on version pinning and OSV-derived advisory severity/count.
 - **Finding normalization:** root-relative paths where possible, deterministic sorting, and duplicate removal.
 - **CLI reports:** human-readable output, JSON (`--json`), and SARIF 2.1.0 (`--sarif`).
 - **Quality checks:** GitHub Actions CI runs Ruff, pytest, and mypy.
