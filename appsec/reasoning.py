@@ -1,5 +1,7 @@
 """Provider-neutral, evidence-grounded AI security reasoning contracts."""
 
+# ruff: noqa: I001
+
 import re
 from typing import Protocol
 
