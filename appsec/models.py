@@ -34,11 +34,6 @@ class Finding(BaseModel):
     confidence: float = Field(default=1.0, ge=0.0, le=1.0)
 
 
-"""Dependency inventory models."""
-
-from pydantic import BaseModel, ConfigDict, Field
-
-
 class Dependency(BaseModel):
     """A declared dependency with its source location and version constraint."""
 
@@ -55,5 +50,6 @@ class ScanResult(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     findings: list[Finding] = Field(default_factory=list)
+    dependencies: list[Dependency] = Field(default_factory=list)
     files_scanned: int = Field(default=0, ge=0)
     rules_run: int = Field(default=0, ge=0)
