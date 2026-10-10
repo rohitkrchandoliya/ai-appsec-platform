@@ -1,13 +1,13 @@
 """Known-vulnerability lookups for exact Python dependency versions."""
 
 import json
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 from urllib.error import URLError
 from urllib.request import Request, urlopen
 
 from appsec.models import Dependency, Finding, Severity
-
 
 OSV_QUERY_URL = "https://api.osv.dev/v1/query"
 
