@@ -25,7 +25,7 @@
 - [x] Python lockfile parsing (`uv.lock`, `poetry.lock`, `Pipfile.lock`)
 - [x] OSV advisory integration for exact-pinned Python dependencies
 - [x] CycloneDX 1.5 SBOM generation for exact-pinned Python dependencies
-- [ ] Dependency risk scoring
+- [x] Deterministic dependency risk scoring
 
 ## Phase 3 — AI Security Reasoning
 - [ ] Provider abstraction
