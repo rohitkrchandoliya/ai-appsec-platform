@@ -35,6 +35,11 @@ def scan(
     sarif_output: bool = typer.Option(
         False, "--sarif", help="Emit SARIF 2.1.0 JSON for code-scanning integrations."
     ),
+    audit_dependencies_flag: bool = typer.Option(
+        False,
+        "--audit-dependencies",
+        help="Query OSV for known issues in exact-pinned Python dependencies.",
+    ),
 ) -> None:
     """Run deterministic security scanners against PATH."""
     scanners = (
@@ -58,6 +63,13 @@ def scan(
         )
     )
     dependencies = discover_dependencies(path)
+    if audit_dependencies_flag:
+        try:
+            dependency_findings = audit_dependencies(dependencies, path)
+        except RuntimeError as exc:
+            raise typer.BadParameter(str(exc)) from exc
+        findings = normalize_findings([*findings, *dependency_findings], path)
+
     result = ScanResult(
         findings=findings,
         dependencies=dependencies,
