@@ -3,8 +3,9 @@
 import re
 from typing import Protocol
 
-from appsec.models import Finding
 from pydantic import BaseModel, ConfigDict, Field
+
+from appsec.models import Finding
 
 
 _SECURITY_IDENTIFIER = re.compile(r"\b(?:CVE-\d{4}-\d{4,}|CWE-\d+)\b", re.IGNORECASE)
