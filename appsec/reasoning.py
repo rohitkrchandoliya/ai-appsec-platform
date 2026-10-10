@@ -1,7 +1,5 @@
 """Provider-neutral, evidence-grounded AI security reasoning contracts."""
 
-from __future__ import annotations
-
 import re
 from typing import Protocol
 
@@ -10,7 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from appsec.models import Finding
 
 
-_SECURITY_IDENTIFIER = re.compile(r"\\b(?:CVE-\\d{4}-\\d{4,}|CWE-\\d+)\\b", re.IGNORECASE)
+_SECURITY_IDENTIFIER = re.compile(r"\b(?:CVE-\d{4}-\d{4,}|CWE-\d+)\b", re.IGNORECASE)
 
 
 class ReasoningRequest(BaseModel):
