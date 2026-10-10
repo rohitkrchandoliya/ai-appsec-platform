@@ -3,6 +3,7 @@
 from appsec.models import Dependency, Finding, Severity
 
 
+
 _SEVERITY_WEIGHT = {
     Severity.INFO: 0,
     Severity.LOW: 15,
