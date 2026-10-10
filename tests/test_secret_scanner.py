@@ -45,3 +45,29 @@ def test_ignores_common_placeholder(tmp_path: Path) -> None:
     write_source(tmp_path, "config.py", 'API_KEY = "your-api-key"\n')
     findings = SecretScanner().scan(tmp_path)
     assert findings == []
+
+
+def test_detects_high_entropy_value_and_redacts_evidence(tmp_path: Path) -> None:
+    value = "aB7$kP9!xQ2@vL5#nR8%tY4&"
+    write_source(tmp_path, "config.py", f'CACHE_VALUE = "{value}"\n')
+    findings = SecretScanner().scan(tmp_path)
+    assert len(findings) == 1
+    assert findings[0].rule_id == "SEC-006"
+    assert findings[0].severity is Severity.MEDIUM
+    assert value not in (findings[0].evidence or "")
+
+
+def test_ignores_low_entropy_configuration_value(tmp_path: Path) -> None:
+    write_source(tmp_path, "config.py", 'CACHE_VALUE = "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"\n')
+    findings = SecretScanner().scan(tmp_path)
+    assert findings == []
+
+
+def test_ignores_url_as_entropy_candidate(tmp_path: Path) -> None:
+    write_source(
+        tmp_path,
+        "config.py",
+        'ENDPOINT = "https://api.example.com/v1/resources/very-long-path"\n',
+    )
+    findings = SecretScanner().scan(tmp_path)
+    assert findings == []
