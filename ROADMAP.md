@@ -24,7 +24,7 @@
 - [x] Entropy-assisted secret detection
 - [x] Python lockfile parsing (`uv.lock`, `poetry.lock`, `Pipfile.lock`)
 - [x] OSV advisory integration for exact-pinned Python dependencies
-- [ ] SBOM generation
+- [x] CycloneDX 1.5 SBOM generation for exact-pinned Python dependencies
 - [ ] Dependency risk scoring
 
 ## Phase 3 — AI Security Reasoning
