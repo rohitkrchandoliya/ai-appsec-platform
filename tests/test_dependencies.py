@@ -89,3 +89,30 @@ def test_parses_pipfile_lock_versions(tmp_path: Path) -> None:
         ("requests", "==2.32.0"),
         ("pytest", "==8.3.0"),
     }
+
+
+
+def test_audits_exact_pins_and_deduplicates_versions(tmp_path: Path) -> None:
+    from appsec.models import Dependency, Severity
+    from appsec.scanners.advisories import audit_dependencies
+
+    requirements = tmp_path / "requirements.txt"
+    dependencies = [
+        Dependency(name="requests", specifier="==2.32.0", source=str(requirements)),
+        Dependency(name="requests", specifier="==2.32.0", source=str(requirements)),
+        Dependency(name="flask", specifier=">=3.0", source=str(requirements)),
+    ]
+    calls: list[tuple[str, str]] = []
+
+    def fake_query(name: str, version: str) -> list[dict[str, object]]:
+        calls.append((name, version))
+        return [{"id": "PYSEC-TEST-1", "summary": "Test advisory",
+                 "affected": [{"ecosystem_specific": {"severity": "HIGH"}}]}]
+
+    findings = audit_dependencies(dependencies, tmp_path, query=fake_query)
+
+    assert calls == [("requests", "2.32.0")]
+    assert len(findings) == 1
+    assert findings[0].rule_id == "DEP-PYSEC-TEST-1"
+    assert findings[0].severity == Severity.HIGH
+    assert findings[0].path == Path("requirements.txt")
