@@ -7,6 +7,7 @@ A developer-first application security scanner that combines deterministic sourc
 - **Python SAST:** AST-based rules for `eval()` / `exec()` and `subprocess.run(..., shell=True)`.
 - **JavaScript/TypeScript SAST:** pattern rules for `eval()`, `new Function()`, `exec()` / `execSync()`, `innerHTML`, and React `dangerouslySetInnerHTML`.
 - **Secret detection:** patterns for private-key headers, AWS access key IDs, GitHub tokens, Slack token-like strings, and quoted hardcoded credential assignments. Evidence is redacted by the current secret rules.
+- **Dependency inventory:** parses PEP 621 dependencies and optional groups from `pyproject.toml`, requirements files, and exact versions from `uv.lock`, `poetry.lock`, and `Pipfile.lock`. Inventory is included in JSON scan results; advisory lookups are not yet implemented.
 - **Finding normalization:** root-relative paths where possible, deterministic sorting, and duplicate removal.
 - **CLI reports:** human-readable output, JSON (`--json`), and SARIF 2.1.0 (`--sarif`).
 - **Quality checks:** GitHub Actions CI runs Ruff, pytest, and mypy.
@@ -69,7 +70,7 @@ See [ROADMAP.md](ROADMAP.md) for the implementation plan and production-readines
 - Detection coverage is narrow and rule-based.
 - JavaScript/TypeScript analysis is regex-based and may produce false positives or miss indirect/obfuscated cases.
 - Secret patterns do not cover every provider, token type, encoding, or credential storage pattern.
-- Dependency vulnerability analysis, AI reasoning/remediation, GitHub PR integration, API, dashboard, authentication, and team workflows are not implemented yet.
+- Dependency advisory lookup and risk scoring, SBOM generation, AI reasoning/remediation, GitHub PR integration, API, dashboard, authentication, and team workflows are not implemented yet.
 - Production readiness requires broader fixtures and coverage, dependency locking/auditing, a documented threat model, reproducible builds, and repository governance.
 
 ## License
