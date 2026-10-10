@@ -8,6 +8,7 @@ from rich.console import Console
 
 from appsec import __version__
 from appsec.findings import normalize_findings
+from appsec.scanners.dependencies import discover_dependencies
 from appsec.models import ScanResult
 from appsec.sarif import sarif_json
 from appsec.scanners import JavaScriptSecurityScanner, PythonSecurityScanner, SecretScanner
@@ -56,6 +57,7 @@ def scan(
         )
     )
     result = ScanResult(findings=findings, files_scanned=files_scanned, rules_run=12)
+    _ = discover_dependencies(path)
 
     if json_output and sarif_output:
         raise typer.BadParameter("Use either --json or --sarif, not both.")
